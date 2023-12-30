@@ -1,6 +1,8 @@
 const asyncHandler = require("express-async-handler");
 const Task = require("../models/taskModel");
 
+//TO DO: MAKE ROUTES PRIVATE AND VALIDATIONS
+
 // Description: Get specific user tasks
 // Route: GET /taskManagement/tasks
 // Access: Private
@@ -13,14 +15,22 @@ const getTasks = asyncHandler(async (req, res) => {
 // Route: POST /taskManagement/tasks
 // Access: Private
 const createTasks = asyncHandler(async (req, res) => {
-  if (!req.body.taskName) {
+  if (!req.body.name) {
     //Set bad request error
     res.status(400);
-    throw new Error("Please add a taskName field");
+    throw new Error("Please add a name field");
+  }
+  if (!req.body.description) {
+    //Set bad request error
+    res.status(400);
+    throw new Error("Please add a description field");
   }
 
   const task = await Task.create({
-    taskName: req.body.taskName,
+    name: req.body.name,
+    description: req.body.description,
+    status: req.body.status,
+    dueDate: req.body.dueDate,
   });
 
   res.status(200).json(task);
